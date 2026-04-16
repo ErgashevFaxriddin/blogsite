@@ -1,0 +1,271 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Barcha Maqolalar — LuxeBlog{% endblock %}
+
+{% block extra_styles %}
+.hero {
+    padding: 6rem 4rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: block;
+    animation: fadeInDown 0.8s ease both;
+}
+
+.hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    animation: fadeInUp 0.9s ease 0.1s both;
+}
+
+.hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+}
+
+.hero-sub {
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    animation: fadeInUp 0.9s ease 0.2s both;
+}
+
+/* ─── POST GRID ─── */
+.posts-section {
+    padding: 2rem 4rem 6rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+}
+
+.post-card {
+    background: var(--dark-2);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Layout: First card big, rest smaller */
+.post-card:nth-child(1) { grid-column: span 7; }
+.post-card:nth-child(2) { grid-column: span 5; }
+.post-card:nth-child(3) { grid-column: span 4; }
+.post-card:nth-child(4) { grid-column: span 4; }
+.post-card:nth-child(5) { grid-column: span 4; }
+
+.post-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.post-card:hover { background: var(--dark-3); }
+.post-card:hover::before { opacity: 1; }
+
+.post-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.5s ease;
+}
+
+.post-card:hover::after { width: 100%; }
+
+.post-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    margin-bottom: 2rem;
+    opacity: 0.6;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.post-meta span {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.post-meta .author { color: var(--gold-light); }
+
+.post-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text);
+    transition: color 0.3s ease;
+}
+
+.post-card:hover .post-title { color: var(--gold-light); }
+
+.post-body {
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.read-more::after {
+    content: '→';
+    transition: transform 0.3s ease;
+}
+
+.post-card:hover .read-more::after { transform: translateX(4px); }
+
+/* ─── PAGINATION ─── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 3rem 0 5rem;
+}
+
+.pagination a, .pagination span {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover { border-color: var(--gold); color: var(--gold); }
+.pagination .current { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.post-card {
+    animation: fadeInUp 0.6s ease both;
+}
+.post-card:nth-child(1) { animation-delay: 0.1s; }
+.post-card:nth-child(2) { animation-delay: 0.2s; }
+.post-card:nth-child(3) { animation-delay: 0.3s; }
+.post-card:nth-child(4) { animation-delay: 0.4s; }
+.post-card:nth-child(5) { animation-delay: 0.5s; }
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+    <span class="hero-label">✦ So'nggi Nashrlar ✦</span>
+    <h1 class="hero-title">Fikr &amp; <em>San'at</em></h1>
+    <p class="hero-sub">Har bir so'z — sayohat boshlanishi</p>
+</section>
+
+<!-- POSTS -->
+<section class="posts-section">
+    <div class="posts-grid">
+        {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}" class="post-card">
+            <div class="post-number">0{{ forloop.counter }}</div>
+            <div class="post-meta">
+                <span>{{ post.publish|date:"d M, Y" }}</span>
+                <span class="author">{{ post.author.get_full_name|default:post.author.username }}</span>
+            </div>
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-body">{{ post.body|truncatewords:30 }}</p>
+            <span class="read-more">O'qish</span>
+        </a>
+        {% empty %}
+        <div class="post-card" style="grid-column: span 12; text-align:center; padding: 6rem;">
+            <p style="color: var(--text-muted); font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-style:italic;">
+                Hozircha maqolalar mavjud emas
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- PAGINATION -->
+    {% if is_paginated %}
+    <nav class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">‹</a>
+        {% endif %}
+        {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">›</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+</section>
+{% endblock %}

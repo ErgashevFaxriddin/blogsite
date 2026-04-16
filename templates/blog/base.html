@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Luxe Blog{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #e8d5a3;
+            --dark: #0d0d0d;
+            --dark-2: #161616;
+            --dark-3: #1e1e1e;
+            --text: #e8e2d9;
+            --text-muted: #8a8278;
+            --border: rgba(201, 168, 76, 0.2);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── NOISE TEXTURE OVERLAY ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ─── HEADER ─── */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(13,13,13,0.98), transparent);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .logo span { font-style: italic; color: var(--text); }
+
+        nav { display: flex; gap: 2.5rem; align-items: center; }
+
+        nav a {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover { color: var(--gold-light); }
+        nav a:hover::after { width: 100%; }
+
+        /* ─── MAIN ─── */
+        main {
+            padding-top: 6rem;
+            min-height: 100vh;
+        }
+
+        /* ─── GOLD DIVIDER ─── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .divider-icon {
+            color: var(--gold);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        footer span { color: var(--gold); }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+        /* ─── SELECTION ─── */
+        ::selection { background: var(--gold); color: var(--dark); }
+
+        {% block extra_styles %}{% endblock %}
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="{% url 'blog:post_list' %}" class="logo">Luxe<span>Blog</span></a>
+    <nav>
+        <a href="{% url 'blog:post_list' %}">Asosiy</a>
+        <a href="#">Kategoriyalar</a>
+        <a href="#">Muallif</a>
+        <a href="#">Bog'lanish</a>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <div class="divider"><span class="divider-icon">✦</span></div>
+    <p>&copy; 2025 <span>LuxeBlog</span> — Barcha huquqlar himoyalangan</p>
+</footer>
+
+</body>
+</html>

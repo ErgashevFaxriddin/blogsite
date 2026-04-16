@@ -12,7 +12,7 @@ class PublishedManager(models.Manager):
 class Post(models.Model):
     STATUS_CHOICES = (
         ('draft', 'Draft'),
-        ('publishied', 'Published')
+        ('published', 'Published')
     )
 
     title = models.CharField(max_length=255)
@@ -25,7 +25,7 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
 
     class Meta:
-        ordering = ('-publish',)
+        ordering = ('-publish',) # eng so'ngi xabarlar oxirida ko'rinishi uchun
 
     def __str__(self):
         return self.title
@@ -33,6 +33,14 @@ class Post(models.Model):
     objects = models.Manager()
     published = PublishedManager()
 
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', args=[
+            self.publish.year,
+            self.publish.month,
+            self.publish.day,
+            self.slug
+        ])
 
-posts = Post.objects.filter(status='published')
-p_posts = Post.published.all()
+
+# posts = Post.objects.filter(status='published')
+# p_posts = Post.published.all()
