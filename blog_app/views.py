@@ -12,3 +12,25 @@ class PostListView(ListView):
 def post_detail(request, year, month, day, slug):
     post = get_object_or_404(Post, slug=slug, status="published", publish_year=year, publish_month=month, publish_day=day)
     return render(request, 'blog/post/detail.html', {'post' : post})
+
+# views.py — post_detail ga qo'shing
+from .forms import CommentForm
+
+def post_detail(request, year, month, day, slug):
+    post = get_object_or_404(Post, slug=slug, status='published',
+                             publish__year=year, publish__month=month, publish__day=day)
+    comments = post.comments.filter(active=True)
+    form = CommentForm()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+
+    return render(request, 'blog/post/detail.html', {
+        'post': post,
+        'comments': comments,
+        'form': form
+    })
