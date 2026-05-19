@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
 from django.views import View
 from .models import Post
+from .forms import CommentForm  # keyin yaratamiz
 
 
 class PostListView(ListView):
@@ -21,7 +22,10 @@ class PostDetailView(View):
             publish__month=month,
             publish__day=day,
         )
-        comments = post.comments.filter(active=True)
+
+        # Kommentlarni olish
+        comments = post.comments.filter(active=True)  # Endi ishlaydi
+
         form = CommentForm()
 
         return render(request, 'blog/post/detail.html', {
@@ -46,11 +50,9 @@ class PostDetailView(View):
             comment = form.save(commit=False)
             comment.post = post
             comment.save()
-            # Muvaffaqiyatli qo'shilgandan keyin redirect (PRG)
             return redirect('blog:post_detail',
                             year=year, month=month, day=day, slug=slug)
 
-        # Form xato bo'lsa, qayta ko'rsatamiz
         comments = post.comments.filter(active=True)
         return render(request, 'blog/post/detail.html', {
             'post': post,

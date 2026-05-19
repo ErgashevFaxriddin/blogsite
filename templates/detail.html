@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+<div class="post-detail">
+    <h1>{{ post.title }}</h1>
+    
+    <p class="post-meta">
+        <strong>Author:</strong> {{ post.author.get_full_name|default:post.author.username }} 
+        | 
+        <strong>Date:</strong> {{ post.publish|date:"d M, Y" }}
+    </p>
+
+    <div class="post-body">
+        {{ post.body|linebreaks }}
+    </div>
+
+    <hr>
+
+    <!-- Kommentlar -->
+    <h3>Kommentariyalar ({{ comment_count }})</h3>
+    
+    {% for comment in comments %}
+        <div class="comment">
+            <strong>{{ comment.name }}</strong> 
+            <small>{{ comment.created|date:"d M, Y H:i" }}</small>
+            <p>{{ comment.body|linebreaks }}</p>
+        </div>
+    {% empty %}
+        <p>Hozircha hech qanday komment yo‘q.</p>
+    {% endfor %}
+
+    <hr>
+
+    <!-- Yangi komment qoldirish formasi -->
+    <h3>Yangi komment qoldiring</h3>
+    <form method="post" style="max-width: 600px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Komment yuborish</button>
+    </form>
+</div>
+
+{% endblock %}
