@@ -34,6 +34,10 @@ class Post(models.Model):
             models.Index(fields=['-publish']),
         ]
 
+    def __init__(self, *args: Any, **kwargs: Any):
+        super().__init__(args, kwargs)
+        self.comments = None
+
     def __str__(self):
         return self.title
 

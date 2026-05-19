@@ -1,46 +1,38 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}{{ post.title }}{% endblock %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title|default:"Post" }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.7; }
+        h1 { color: #333; }
+        .error { color: red; background: #ffebee; padding: 10px; }
+    </style>
+</head>
+<body>
 
-{% block content %}
-
-<div class="post-detail">
     <h1>{{ post.title }}</h1>
-    
-    <p class="post-meta">
-        <strong>Author:</strong> {{ post.author.get_full_name|default:post.author.username }} 
-        | 
-        <strong>Date:</strong> {{ post.publish|date:"d M, Y" }}
-    </p>
 
-    <div class="post-body">
+    <p><strong>Sana:</strong> {{ post.publish|date:"d.m.Y H:i" }}</p>
+    <p><strong>Muallif:</strong> {{ post.author }}</p>
+
+    <hr>
+
+    <div>
         {{ post.body|linebreaks }}
     </div>
 
     <hr>
+    <a href="/">← Bosh sahifaga qaytish</a>
 
-    <!-- Kommentlar -->
-    <h3>Kommentariyalar ({{ comment_count }})</h3>
-    
-    {% for comment in comments %}
-        <div class="comment">
-            <strong>{{ comment.name }}</strong> 
-            <small>{{ comment.created|date:"d M, Y H:i" }}</small>
-            <p>{{ comment.body|linebreaks }}</p>
-        </div>
-    {% empty %}
-        <p>Hozircha hech qanday komment yo‘q.</p>
-    {% endfor %}
-
+    <!-- Debug uchun -->
     <hr>
+    <h3>Debug Info:</h3>
+    <p>Post ID: {{ post.id }}</p>
+    <p>Slug: {{ post.slug }}</p>
 
-    <!-- Yangi komment qoldirish formasi -->
-    <h3>Yangi komment qoldiring</h3>
-    <form method="post" style="max-width: 600px;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Komment yuborish</button>
-    </form>
-</div>
-
-{% endblock %}
+</body>
+</html>
