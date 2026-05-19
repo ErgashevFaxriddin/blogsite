@@ -60,6 +60,3 @@ class PostDetailView(View):
             'form': form,
             'comment_count': comments.count(),
         })
-
-
-print("hello gt test")
