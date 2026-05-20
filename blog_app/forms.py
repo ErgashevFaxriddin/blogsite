@@ -5,7 +5,10 @@ from .models import Comment
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'body')
+        # Post maydoni formda bo‘lmasin — view’da biriktiriladi
+        fields = ['name', 'email', 'body']
         widgets = {
-            'body': forms.Textarea(attrs={'rows': 5}),
+            'name': forms.TextInput(attrs={'placeholder': 'Ismingiz'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
+            'body': forms.Textarea(attrs={'placeholder': 'Izohingiz...'}),
         }
